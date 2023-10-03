@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Player Details: {{ player.name }}
+{% endblock %}
+
+{% block content %}
+    <h1>Player Details: {{ player.name }}</h1>
+    <p><strong>Team:</strong> {{ player.team }}</p>
+    <p><strong>Cost:</strong> {{ player.cost }}</p>
+
+    <h2>Point Scoring Events</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Game</th>
+                <th>Event</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for event in events %}
+                <tr>
+                    <td><a href="{% url 'Game Detail' event.game.id %}">
+                        {{ event.game }}
+                    </a></td>
+                    <td>{{ event.event }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

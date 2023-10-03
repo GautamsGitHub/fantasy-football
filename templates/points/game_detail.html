@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Game Details
+{% endblock %}
+
+{% block content %}
+<h1>Game Details</h1>
+<p>Our Team: {{ game.ourTeam }}</p>
+<p>Their Team: {{ game.theirTeam }}</p>
+<p>Home Game: {{ game.home }}</p>
+<p>Date: {{ game.date }}</p>
+
+{% if game.played %}
+<p>Our Score: {{ game.ourScore }}</p>
+<p>Their Score: {{ game.theirScore }}</p>
+<p>Game Week: {{ game.week }}</p>
+{% else %}
+<a href="{% url 'Update Game' game.id %}">Enter the result</a>
+{% endif %}
+
+<h2>Point Scoring Events</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Player</th>
+                <th>Event</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for event in events %}
+            <tr>
+                <td><a href="{% url 'Player Detail' event.player.id %}">
+                    {{ event.player }}
+                </a></td>
+                <td>{{ event.event }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

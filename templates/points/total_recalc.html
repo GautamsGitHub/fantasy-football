@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Total Recalculate and Recollectn
+{% endblock %}
+
+{% block content %}
+<h1>
+    Recalculate and Recollect Everything in Season
+</h1>
+<p>
+    Recalculate the points earned from each game that
+    was already awarded and Recollect the points for
+    each fantasysquad week. This is useful if you want
+    to go back and add things to a game that has already
+    been awarded (1/10/2023 - changing an awarded game does
+    not automatically change the points awarded from it).
+</p>
+<p>
+    Accidentally doing this will do a lot of
+    computing but is harmless otherwise.
+</p>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">
+        Recalculate and Recollect Everything in Season
+    </button>
+  </form>
+{% endblock %}

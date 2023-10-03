@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Player List
+{% endblock %}
+
+{% block content %}
+    <h1>Player List</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Cost</th>
+                <th>Name</th>
+                <th>Position</th>
+                <th>Team</th>
+                <th>Played</th>
+                <th>Goals</th>
+                <th>Assists</th>
+                {% for week in lastThreeWeeks %}
+                <th>
+                    Points in {{ week }}
+                </th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for player in players %}
+                <tr>
+                    <td>{{ player.cost }}</td>
+                    <td><a href="{% url 'Player Detail' player.id %}">
+                        {{ player }}
+                    </a></td>
+                    <td>{{ player.position }}</td>
+                    <td>{{ player.team }}</td>
+                    <td>{{ player.vital_stats.played }}</td>
+                    <td>{{ player.vital_stats.goals }}</td>
+                    <td>{{ player.vital_stats.assists }}</td>
+                    {% for points in player.points_in_last_three_weeks %}
+                    <td>
+                        {{ points }}
+                    </td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

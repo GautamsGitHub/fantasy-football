@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Check Transfers
+{% endblock %}
+
+{% block content %}
+<h2>Check your transfers</h2>
+
+<table>
+    <tr>
+        <td>
+        Players In:
+        <ul>
+            {% for player in playersIn %}
+            <li>{{ player }}</li>
+            {% endfor %}
+        </ul>
+        </td>
+        <td>
+        Players Out:
+        <ul>
+            {% for player in playersOut %}
+            <li>{{ player }}</li>
+            {% endfor %}
+        </ul>
+        </td>
+    </tr>
+</table>
+
+<p> Leaving {{ newBudget }} in the bank </p>
+<p> And losing {{ chemistryReduction }} chemistry </p>
+
+<form method="post" action="{% url 'Confirm Transfers' %}">
+  {% csrf_token %}
+  {{ confirmForm.squad }}
+  <button type="submit">Confirm Transfers</button>
+</form>
+{% endblock %}

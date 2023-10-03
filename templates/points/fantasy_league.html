@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Fantasy League Table
+{% endblock %}
+
+{% block content %}
+<h1>Fantasy Teams Table</h1>
+<table>
+    <thead>
+        <tr>
+            <th>Manager</th>
+            <th>Total Points</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for fantasy in fantasies %}
+            <tr>
+                <td>{{ fantasy.manager }}</td>
+                <td>{{ fantasy.preCalcedPoints }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

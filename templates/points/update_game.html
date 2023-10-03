@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Game Details
+{% endblock %}
+
+{% block content %}
+
+<form method="post" action="{% url 'Update Game' game_id=game_id %}">
+    {% csrf_token %}
+    {{ result_form.as_p }}
+    {{ contributions_formset.management_form }}
+    <ul>
+        {% for contribution_form in contributions_formset %}
+            <li>
+                {{ contribution_form.as_table }}
+            </li>
+        {% endfor %}
+    </ul>
+    <input type="submit" value="Submit">
+</form>
+
+{% endblock %}
