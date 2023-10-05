@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block scripts %}
+<style>
+    .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .centered-row {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 20px;
+    }
+
+    .centered-row div {
+        margin: 30px;
+    }
+
+    .positioned-player {
+        text-align: center;
+    }
+
+</style>
+{% endblock %}
+
+{% block title %}
+Week Details
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <div class="centered-row">
+        <div class="positioned-player">
+            {{ posPlayerPoints.GK.player }} <br> {{ posPlayerPoints.GK.points }}
+        </div>
+    </div>
+    <div class="centered-row">
+        <div class="positioned-player">
+            {{ posPlayerPoints.RB.player }} <br> {{ posPlayerPoints.RB.points }}
+        </div>
+        <div class="positioned-player">
+            {{ posPlayerPoints.RCB.player }} <br> {{ posPlayerPoints.RCB.points }}
+        </div>
+        <div class="positioned-player">
+            {{ posPlayerPoints.LCB.player }} <br> {{ posPlayerPoints.LCB.points }}
+        </div>
+        <div class="positioned-player">
+            {{ posPlayerPoints.LB.player }} <br> {{ posPlayerPoints.LB.points }}
+        </div>
+    </div>
+    <div class="centered-row">
+        <div class="positioned-player">
+            {{ posPlayerPoints.RM.player }} <br> {{ posPlayerPoints.RM.points }}
+        </div>
+        <div class="positioned-player">
+            {{ posPlayerPoints.RCM.player }} <br> {{ posPlayerPoints.RCM.points }}
+        </div>
+        <div class="positioned-player">
+            {{ posPlayerPoints.LCM.player }} <br> {{ posPlayerPoints.LCM.points }}
+        </div>
+        <div class="positioned-player">
+            {{ posPlayerPoints.LM.player }} <br> {{ posPlayerPoints.LM.points }}
+        </div>
+    </div>
+    <div class="centered-row">
+        <div class="positioned-player">
+            {{ posPlayerPoints.RS.player }} <br> {{ posPlayerPoints.RS.points }}
+        </div>
+        <div class="positioned-player">
+            {{ posPlayerPoints.LS.player }} <br> {{ posPlayerPoints.LS.points }}
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

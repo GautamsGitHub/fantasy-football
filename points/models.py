@@ -124,6 +124,21 @@ class Squad(models.Model):
             self.ls
         })
     
+    def toDict(self):
+        return ({
+            "GK" : self.gk,
+            "RB" : self.rb,
+            "RCB" : self.rcb,
+            "LCB" : self.lcb,
+            "LB" : self.lb,
+            "RM" : self.rm,
+            "RCM" : self.rcm,
+            "LCM" : self.lcm,
+            "LM" : self.lm,
+            "RS" : self.rs,
+            "LS" : self.ls
+        })
+    
     def cost(self):
         return (sum(list(map(lambda p: p.cost, self.toSet()))))
     

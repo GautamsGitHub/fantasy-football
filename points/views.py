@@ -316,7 +316,6 @@ def updateGame(request, game_id):
 
 def playerList(request):
     lastThreeWeeks = myModels.WeekCount.objects.order_by("-date")[:3]
-    print(lastThreeWeeks)
     players = myModels.Player.objects.all()
     for player in players:
         player.vital_stats = player.getVitalStats()
@@ -333,4 +332,31 @@ def playerDetail(request, player_id):
     return render(request, 'points/player_detail.html', {
         'player' : player,
         'events' : events
+    })
+
+def weekList(request, season_id):
+    weeks = myModels.WeekCount.objects.filter(season_id=season_id)
+    fantasy = myModels.Fantasy.objects.get(
+        season_id=season_id, manager=request.user)
+    fsws = myModels.FantasySquadWeek.objects.filter(
+        week__in=weeks, fantasy=fantasy
+    )
+    return render(request, 'points/week_list.html', context={
+        'fsws' : fsws,
+        'season' : season_id
+    })
+
+def weekDetail(request, season_id, week_id):
+    fantasy = myModels.Fantasy.objects.get(
+        season_id=season_id, manager=request.user)
+    fsw = myModels.FantasySquadWeek.objects.get(
+        fantasy=fantasy, week_id=week_id)
+    posPlayers = fsw.squad.toDict()
+    posPlayerPoints = {
+        position: myModels.WeekPlayerPoints.objects.get(
+            week_id=week_id, player=player
+            ) for position, player in posPlayers.items()}
+    return render(request, 'points/week_detail.html', context={
+        'fsw' : fsw,
+        'posPlayerPoints' : posPlayerPoints
     })

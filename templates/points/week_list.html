@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Week List
+{% endblock %}
+
+{% block content %}
+<h1>Week List</h1>
+<ul>
+    {% for fsw in fsws %}
+        <li>
+            <a href="{% url 'Week Detail' season fsw.week_id %}">
+                {{ fsw.week.date }}
+            </a>
+        </li>
+    {% endfor %}
+</ul>
+
+{% endblock %}
