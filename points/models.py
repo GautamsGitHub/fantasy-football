@@ -272,6 +272,9 @@ class Fantasy(models.Model):
             return True
         else:
             return False
+        
+    def __str__(self) -> str:
+        return (f"Fantasy of {self.manager} for {self.season}")
 
 
 class FantasySquadWeek(models.Model):
@@ -294,6 +297,9 @@ class FantasySquadWeek(models.Model):
         )
         self.save()
         return self.preCalcedPoints
+    
+    def __str__(self) -> str:
+        return (f"{self.fantasy} in {self.week}")
 
 
 def normalizeGoals(n):

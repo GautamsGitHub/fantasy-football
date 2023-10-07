@@ -64,8 +64,8 @@ class confirmSquadForm(forms.Form):
         queryset=myModels.Squad.objects.all()
     )
 
-def welcome(request):
-    return(render(request, "home.html"))
+def index(request):
+    return(render(request, "points/index.html"))
 
 def weeklyUpdate(request):
     if request.method == 'POST':
@@ -324,6 +324,18 @@ def playerList(request):
     return render(request, 'points/player_list.html', {
         'lastThreeWeeks' : lastThreeWeeks,
         "players" : players
+    })
+
+def seasonList(request):
+    seasons = myModels.Season.objects.all()
+    return render(request, 'points/season_list.html', {
+        "seasons" : seasons
+    })
+
+def seasonDetail(request, season_id):
+    season = myModels.Season.objects.get(pk=season_id)
+    return render(request, 'points/season_detail.html', {
+        'season' : season,
     })
 
 def playerDetail(request, player_id):

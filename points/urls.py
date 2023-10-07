@@ -24,13 +24,15 @@ urlpatterns = [
     path("<int:season_id>/table", views.fantasyLeague, name="Fantasy League"),
     path('game/<int:game_id>/', views.gameDetail, name='Game Detail'),
     path('player/<int:player_id>/', views.playerDetail, name='Player Detail'),
+    path('season/<int:season_id>/', views.seasonDetail, name='Season Detail'),
     path('<int:season_id>/week/<int:week_id>/', views.weekDetail, name='Week Detail'),
     path('update_game/<int:game_id>/', views.updateGame, name='Update Game'),
     path('games', views.gameList, name="List of Games"),
     path('players', views.playerList, name="List of Players"),
+    path('seasons', views.seasonList, name="List of Seasons"),
     path('<int:season_id>/weeks', views.weekList, name="List of Weeks"),
     path('confirm_transfers', views.confirmTransfers, name="Confirm Transfers"),
     path('weekly_update', views.weeklyUpdate, name="Weekly Update"),
     path('total_recalc', views.totalRecalc, name="Total Recalculation and Recollection"),
-    path("", views.welcome, name="Welcome")
+    path("", views.index, name="Index")
 ]

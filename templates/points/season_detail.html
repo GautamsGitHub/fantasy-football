@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{ season }}
+{% endblock %}
+
+{% block content %}
+<h1>{{ season }}</h1>
+<ul>
+    <li>
+        <a href="{% url 'Manage Fantasy Team' season.id %}">
+            Manage Fantasy Team
+        </a>
+    </li>
+    <li>
+        <a href="{% url 'Fantasy League' season.id %}">
+            Fantasy League
+        </a>
+    </li>
+    <li>
+        <a href="{% url 'List of Weeks' season.id %}">
+            List of Weeks
+        </a>
+    </li>
+</ul>
+{% endblock %}

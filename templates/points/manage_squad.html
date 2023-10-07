@@ -1,5 +1,34 @@
 {% extends 'base.html' %}
 
+{% block scripts %}
+<style>
+    .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: lightgreen;
+        max-width: 600px;
+    }
+
+    .centered-row {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 20px;
+    }
+
+    .centered-row div {
+        margin: 15px;
+    }
+
+    .positioned-player {
+        text-align: center;
+    }
+
+    /* Add additional CSS for form styling if needed */
+
+</style>
+{% endblock %}
+
 {% block title %}
 Manage Fantasy Squad
 {% endblock %}
@@ -9,9 +38,65 @@ Manage Fantasy Squad
 {% for message in messages %}
 <h3>{{ message.message }}</h3>
 {% endfor %}
+
 <form method="post">
-  {% csrf_token %}
-  {{ form.as_ul }}
-  <button type="submit">Check Transfers</button>
+  <div class="container">
+    <div class="centered-row">
+      <div class="positioned-player">
+          {{ form.gk.label_tag }}
+          {{ form.gk }}
+      </div>
+    </div>
+    <div class="centered-row">
+        <div class="positioned-player">
+            {{ form.rb.label_tag }}
+            {{ form.rb }}
+        </div>
+        <div class="positioned-player">
+            {{ form.rcb.label_tag }}
+            {{ form.rcb }}
+        </div>
+        <div class="positioned-player">
+            {{ form.lcb.label_tag }}
+            {{ form.lcb }}
+        </div>
+        <div class="positioned-player">
+            {{ form.lb.label_tag }}
+            {{ form.lb }}
+        </div>
+    </div>
+    <div class="centered-row">
+        <div class="positioned-player">
+            {{ form.rm.label_tag }}
+            {{ form.rm }}
+        </div>
+        <div class="positioned-player">
+            {{ form.rcm.label_tag }}
+            {{ form.rcm }}
+        </div>
+        <div class="positioned-player">
+            {{ form.lcm.label_tag }}
+            {{ form.lcm }}
+        </div>
+        <div class="positioned-player">
+            {{ form.lm.label_tag }}
+            {{ form.lm }}
+        </div>
+    </div>
+    <div class="centered-row">
+        <div class="positioned-player">
+            {{ form.rs.label_tag }}
+            {{ form.rs }}
+        </div>
+        <div class="positioned-player">
+            {{ form.ls.label_tag }}
+            {{ form.ls }}
+        </div>
+    </div>
+  </div>
+    
+
+    {% csrf_token %}
+    <button type="submit">Check Transfers</button>
 </form>
 {% endblock %}

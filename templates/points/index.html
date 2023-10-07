@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Index
+{% endblock %}
+
+{% block content %}
+<h1>Index</h1>
+<h2>
+    For Members
+</h2>
+<ul>
+    <li>
+        <a href="{% url 'List of Games' %}">
+            List of Games
+        </a>
+    </li>
+    <li>
+        <a href="{% url 'List of Players' %}">
+            List of Players
+        </a>
+    </li>
+    <li>
+        <a href="{% url 'List of Seasons' %}">
+            List of Seasons
+        </a>
+    </li>
+</ul>
+
+<h2>
+    For Captains
+</h2>
+<p>
+    Don't worry. There are more buttons to press before anything happens on these.
+</p>
+<ul>
+    <li>
+        <a href="{% url 'Create Fixture' %}">
+            Create Fixture
+        </a>
+    </li>
+    <li>
+        <a href="{% url 'Weekly Update' %}">
+            Weekly Update
+        </a>
+    </li>
+    <li>
+        <a href="{% url 'Total Recalculation and Recollection' %}">
+            Total Recalculation
+        </a>
+    </li>
+</ul>
+{% endblock %}

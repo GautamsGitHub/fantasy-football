@@ -6,6 +6,8 @@
         display: flex;
         flex-direction: column;
         align-items: center;
+        background-color: lightgreen;
+        max-width: 600px;
     }
 
     .centered-row {
@@ -30,6 +32,11 @@ Week Details
 {% endblock %}
 
 {% block content %}
+
+<h1>{{ fsw }}</h1>
+<h2>Week Points: {{ fsw.preCalcedPoints }}</h2>
+
+<p>Chemistry: {{ fsw.chemistry }}</p>
 
 <div class="container">
     <div class="centered-row">
