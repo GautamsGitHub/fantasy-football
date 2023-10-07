@@ -12,6 +12,23 @@
         {% endblock %}
     </head>
     <body>
+        <nav>
+            <ul>
+                {% if user.is_authenticated %}
+                <li>
+                    {{ user.username }}
+                </li>
+                <li>
+                    <a href="{% url 'logout' %}">Log Out</a></p>
+                </li>
+                {% else %}
+                <li>
+                    <a href="{% url 'login' %}">Log In</a>
+                </li>
+                {% endif %}
+                <li><a href="{% url 'Index' %}">Index</a></li>
+            </ul>
+        </nav>
         <main>
             {% block content %}
             {% endblock %}
