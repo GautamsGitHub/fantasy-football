@@ -5,6 +5,8 @@ from datetime import date
 from django import forms
 from django.forms.formsets import formset_factory
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
 
 
 class SeasonChooser(forms.Form):
@@ -67,6 +69,8 @@ class confirmSquadForm(forms.Form):
 def index(request):
     return(render(request, "points/index.html"))
 
+
+@staff_member_required
 def weeklyUpdate(request):
     if request.method == 'POST':
         form = SeasonChooser(request.POST)
@@ -87,6 +91,8 @@ def weeklyUpdate(request):
         {"form" : form}
     )
 
+
+@staff_member_required
 def totalRecalc(request):
     if request.method == 'POST':
         form = SeasonChooser(request.POST)
@@ -108,6 +114,8 @@ def totalRecalc(request):
         {"form" : form}
     )
 
+
+@login_required
 def manageTeam(request, season_id):
     currentSeason = None        
     fantasy = None
@@ -138,11 +146,12 @@ def manageTeam(request, season_id):
                         "playersIn" : playersIn,
                         "playersOut" : playersOut,
                         "chemistryReduction" : chem,
-                        "newBudget" : newBudget
+                        "newBudget" : newBudget,
+                        "season_id" : season_id,
                     }
                     )
             else:
-                messages.success(request, "Invalid Squad")
+                messages.error(request, "Invalid Squad")
                 return redirect("Manage Fantasy Team", season_id=season_id)
     form = SquadForm(instance=fantasy.currentSquad)
     currentCost = fantasy.currentSquad.cost()
@@ -153,6 +162,8 @@ def manageTeam(request, season_id):
         "messages" : messages.get_messages(request)
         })
 
+
+@login_required
 def confirmTransfers(request, season_id):
     print("confirming transfers")
     fantasy = None
@@ -177,6 +188,8 @@ def confirmTransfers(request, season_id):
                 return redirect("Create Fantasy Team", season_id=season_id)
     return redirect("Manage Fantasy Team", season_id=season_id)
 
+
+@login_required
 def createTeam(request, season_id):
     currentSeason = None
     try:
@@ -210,6 +223,7 @@ def createTeam(request, season_id):
             )
     return redirect("Manage Fantasy Team", season_id=season_id)
     
+
 def fantasyLeague(request, season_id):
     currentSeason = None
     try:
@@ -224,6 +238,8 @@ def fantasyLeague(request, season_id):
     }
     return render(request, 'points/fantasy_league.html', context)
 
+
+@staff_member_required
 def createFixture(request):
     if request.method == 'POST':
         form = FixtureForm(request.POST)
@@ -235,6 +251,7 @@ def createFixture(request):
         "form" : form
     })
 
+
 def gameDetail(request, game_id):
     game = myModels.Game.objects.get(pk=game_id)
     events = myModels.PointScoringEvent.objects.filter(game=game)
@@ -243,12 +260,15 @@ def gameDetail(request, game_id):
         'events' : events
     })
 
+
 def gameList(request):
     games = myModels.Game.objects.all()
     return render(request, 'points/game_list.html', {
         "games" : games
     })
 
+
+@staff_member_required
 def updateGame(request, game_id):
     game = myModels.Game.objects.get(pk=game_id)
     if request.method == 'POST':
@@ -314,6 +334,7 @@ def updateGame(request, game_id):
         "contributions_formset" : playerContributionsFormSet
     })
 
+
 def playerList(request):
     lastThreeWeeks = myModels.WeekCount.objects.order_by("-date")[:3]
     players = myModels.Player.objects.all()
@@ -326,17 +347,20 @@ def playerList(request):
         "players" : players
     })
 
+
 def seasonList(request):
     seasons = myModels.Season.objects.all()
     return render(request, 'points/season_list.html', {
         "seasons" : seasons
     })
 
+
 def seasonDetail(request, season_id):
     season = myModels.Season.objects.get(pk=season_id)
     return render(request, 'points/season_detail.html', {
         'season' : season,
     })
+
 
 def playerDetail(request, player_id):
     player = myModels.Player.objects.get(pk=player_id)
@@ -345,6 +369,7 @@ def playerDetail(request, player_id):
         'player' : player,
         'events' : events
     })
+
 
 def weekList(request, season_id):
     weeks = myModels.WeekCount.objects.filter(season_id=season_id)
@@ -357,6 +382,7 @@ def weekList(request, season_id):
         'fsws' : fsws,
         'season' : season_id
     })
+
 
 def weekDetail(request, season_id, week_id):
     fantasy = myModels.Fantasy.objects.get(

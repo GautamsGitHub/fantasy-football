@@ -31,7 +31,7 @@ Check Transfers
 <p> Leaving {{ newBudget }} in the bank </p>
 <p> And losing {{ chemistryReduction }} chemistry </p>
 
-<form method="post" action="{% url 'Confirm Transfers' %}">
+<form method="post" action="{% url 'Confirm Transfers' season_id %}">
   {% csrf_token %}
   {{ confirmForm.squad }}
   <button type="submit">Confirm Transfers</button>
