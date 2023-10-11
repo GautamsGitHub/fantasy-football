@@ -13,6 +13,9 @@
                 display: inline-block;
                 margin-right: 20px;
             }
+            li {
+                margin-bottom: 8px;
+            }
         </style>
         {% block scripts %}
         {% endblock %}
@@ -33,6 +36,11 @@
                 </li>
                 {% endif %}
                 <li><a href="{% url 'Index' %}">Index</a></li>
+                <li>
+                    <a href="{% url 'Latest Season' %}">
+                        Latest Season
+                    </a>
+                </li>
             </ul>
         </nav>
         <main>

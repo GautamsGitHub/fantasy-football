@@ -19,7 +19,6 @@ from . import views
 
 urlpatterns = [
     path("<int:season_id>/manage_fantasy", views.manageTeam, name="Manage Fantasy Team"),
-    path("<int:season_id>/create_fantasy", views.createTeam, name="Create Fantasy Team"),
     path("new_fixture", views.createFixture, name="Create Fixture"),
     path("<int:season_id>/table", views.fantasyLeague, name="Fantasy League"),
     path('game/<int:game_id>/', views.gameDetail, name='Game Detail'),
@@ -34,5 +33,6 @@ urlpatterns = [
     path('<int:season_id>/confirm_transfers', views.confirmTransfers, name="Confirm Transfers"),
     path('weekly_update', views.weeklyUpdate, name="Weekly Update"),
     path('total_recalc', views.totalRecalc, name="Total Recalculation and Recollection"),
+    path('latest_season', views.latestSeason, name="Latest Season"),
     path("", views.index, name="Index")
 ]

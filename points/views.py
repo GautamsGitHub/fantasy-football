@@ -203,49 +203,6 @@ def confirmTransfers(request, season_id):
     return redirect("Manage Fantasy Team", season_id=season_id)
 
 
-@login_required
-def createTeam(request, season_id):
-    allPlayers = {
-        player.pk : (str(player.cost), str(player.team)) for player in (
-            myModels.Player.objects.all()
-        )
-    }
-    currentSeason = None
-    try:
-        currentSeason = myModels.Season.objects.get(pk=season_id)
-        myModels.Fantasy.objects.get(
-            manager=request.user,
-            season=currentSeason
-            )
-    except myModels.Season.DoesNotExist:
-        return redirect("/")
-    except myModels.Fantasy.DoesNotExist:
-        if request.method == 'POST':
-            form = SquadForm(request.POST)
-            if form.is_valid():
-                newSquad = form.save()
-                if newSquad.validate():
-                    myModels.Fantasy.objects.create(
-                        manager=request.user,
-                        chemistry=float(0),
-                        currentSquad=newSquad,
-                        season=currentSeason
-                        )
-                    return redirect("Manage Fantasy Team", season_id=season_id)
-                else:
-                    return redirect("Create Fantasy Team", season_id=season_id)
-        form = SquadForm()
-        return render(
-            request,
-            "points/fantasise_squad.html",
-            {
-                "form" : form,
-                "all_players" : allPlayers,
-            }
-            )
-    return redirect("Manage Fantasy Team", season_id=season_id)
-    
-
 def fantasyLeague(request, season_id):
     currentSeason = None
     try:
@@ -420,3 +377,8 @@ def weekDetail(request, season_id, week_id):
         'fsw' : fsw,
         'posPlayerPoints' : posPlayerPoints
     })
+
+
+def latestSeason(request):
+    season = myModels.Season.objects.latest('startDate')
+    return redirect("Season Detail", season_id=season.pk)
