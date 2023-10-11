@@ -8,11 +8,17 @@
             Fantasy Football
             {% endblock %}
         </title>
+        <style>
+            .navbar li {
+                display: inline-block;
+                margin-right: 20px;
+            }
+        </style>
         {% block scripts %}
         {% endblock %}
     </head>
     <body>
-        <nav>
+        <nav class="navbar">
             <ul>
                 {% if user.is_authenticated %}
                 <li>

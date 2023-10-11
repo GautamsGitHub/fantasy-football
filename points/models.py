@@ -2,9 +2,11 @@ from django.db import models
 from django.contrib.auth.models import User
 from typing import Iterable
 from datetime import date
+from collections import Counter
 
 BUDGET = 500
 SQUAD_SIZE = 11
+SAME_SQUAD_MAX = 4
 
 class Season(models.Model):
     name = models.CharField(max_length=50)
@@ -140,12 +142,14 @@ class Squad(models.Model):
         })
     
     def cost(self):
-        return (sum(list(map(lambda p: p.cost, self.toSet()))))
+        return (sum(list(map(lambda p: p.cost if p is not None else 0, self.toSet()))))
     
     def validate(self):
+        c = Counter([p.team for p in self.toSet()])
         return (
             len(self.toSet()) == SQUAD_SIZE
             and (BUDGET >= self.cost())
+            and (c.most_common(1)[0][1] <= SAME_SQUAD_MAX)
         )
 
 class EventType(models.TextChoices):

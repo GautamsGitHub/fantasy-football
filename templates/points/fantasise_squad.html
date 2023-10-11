@@ -1,6 +1,46 @@
 {% extends 'base.html' %}
 
 {% block scripts %}
+
+{{ all_players | json_script:"all-players-data" }}
+
+<script>
+
+    document.addEventListener("DOMContentLoaded", function(e){
+        const allPlayersData = JSON.parse(document.getElementById('all-players-data').textContent);
+        const positionedPlayers = document.querySelectorAll(".positioned-player");
+        const totalCostSpan = document.getElementById("total-cost")
+
+        positionedPlayers.forEach(function(positionedPlayerElement) {
+            const cost = positionedPlayerElement.querySelector(".player-cost");
+            const team = positionedPlayerElement.querySelector(".player-team");
+            const playerSelect = positionedPlayerElement.querySelector("select");
+
+            function handlePlayerChange() {
+                if (playerSelect.value !== "") {
+                    cost.textContent = allPlayersData[playerSelect.value][0];
+                    team.textContent = allPlayersData[playerSelect.value][1];
+                }
+                totalCostSpan.textContent = totalCost()
+            }
+
+            playerSelect.addEventListener('change', handlePlayerChange)
+            handlePlayerChange()
+        })
+    })
+
+    function totalCost() {
+        const allCosts = document.getElementsByClassName('player-cost')
+        tC = Array.from(allCosts).map(costEl => {
+            const parsed = parseFloat(costEl.textContent);
+            return isNaN(parsed) ? 0 : parsed;
+        }).reduce((total, c) => total + c, 0.0);
+        return tC
+    }
+
+    
+</script>
+
 <style>
     .container {
         display: flex;
@@ -27,6 +67,7 @@
     /* Add additional CSS for form styling if needed */
 
 </style>
+
 {% endblock %}
 
 {% block title %}
@@ -35,57 +76,81 @@ Create Fantasy Squad
 
 {% block content %}
 <h2>Create your fantasy squad</h2>
-
+<h4>
+    Total Cost: <span id="total-cost"></span>
+</h4>
 <form method="post">
   <div class="container">
     <div class="centered-row">
       <div class="positioned-player">
-          {{ form.gk.label_tag }}
-          {{ form.gk }}
+        Cost: <span class="player-cost"></span><br>
+        Team: <span class="player-team"></span><br>
+        {{ form.gk.label_tag }}
+        {{ form.gk }}
       </div>
     </div>
     <div class="centered-row">
         <div class="positioned-player">
+            Cost: <span class="player-cost"></span><br>
+            Team: <span class="player-team"></span><br>
             {{ form.rb.label_tag }}
             {{ form.rb }}
         </div>
         <div class="positioned-player">
+            Cost: <span class="player-cost"></span><br>
+            Team: <span class="player-team"></span><br>
             {{ form.rcb.label_tag }}
             {{ form.rcb }}
         </div>
         <div class="positioned-player">
+            Cost: <span class="player-cost"></span><br>
+            Team: <span class="player-team"></span><br>
             {{ form.lcb.label_tag }}
             {{ form.lcb }}
         </div>
         <div class="positioned-player">
+            Cost: <span class="player-cost"></span><br>
+            Team: <span class="player-team"></span><br>
             {{ form.lb.label_tag }}
             {{ form.lb }}
         </div>
     </div>
     <div class="centered-row">
         <div class="positioned-player">
+            Cost: <span class="player-cost"></span><br>
+            Team: <span class="player-team"></span><br>
             {{ form.rm.label_tag }}
             {{ form.rm }}
         </div>
         <div class="positioned-player">
+            Cost: <span class="player-cost"></span><br>
+            Team: <span class="player-team"></span><br>
             {{ form.rcm.label_tag }}
             {{ form.rcm }}
         </div>
         <div class="positioned-player">
+            Cost: <span class="player-cost"></span><br>
+            Team: <span class="player-team"></span><br>
             {{ form.lcm.label_tag }}
             {{ form.lcm }}
         </div>
         <div class="positioned-player">
+            Cost: <span class="player-cost"></span><br>
+            Team: <span class="player-team"></span><br>
             {{ form.lm.label_tag }}
             {{ form.lm }}
         </div>
     </div>
     <div class="centered-row">
         <div class="positioned-player">
+            Cost: <span class="player-cost"></span><br>
+            Team: <span class="player-team"></span><br>
             {{ form.rs.label_tag }}
             {{ form.rs }}
         </div>
         <div class="positioned-player">
+            Cost: <span class="player-cost"></span><br>
+            Team: <span class="player-team"></span><br>
             {{ form.ls.label_tag }}
             {{ form.ls }}
         </div>
@@ -93,6 +158,6 @@ Create Fantasy Squad
 </div>
 
     {% csrf_token %}
-    <button type="submit">Submit Squad</button>
+    <button type="submit">Check Squad</button>
 </form>
 {% endblock %}

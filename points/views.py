@@ -117,17 +117,29 @@ def totalRecalc(request):
 
 @login_required
 def manageTeam(request, season_id):
+    allPlayers = {
+        player.pk : (str(player.cost), str(player.team)) for player in (
+            myModels.Player.objects.all()
+        )
+    }
     currentSeason = None        
     fantasy = None
     try:
         currentSeason = myModels.Season.objects.get(pk=season_id)
+    except myModels.Season.DoesNotExist:
+        return redirect("/")
+    try:
         fantasy = myModels.Fantasy.objects.get(
             manager=request.user, season=currentSeason
             )
-    except myModels.Season.DoesNotExist:
-        return redirect("/")
     except myModels.Fantasy.DoesNotExist:
-        return redirect("Create Fantasy Team", season_id=season_id)
+        playerlessSquad = myModels.Squad.objects.create()
+        fantasy = myModels.Fantasy.objects.create(
+            manager=request.user,
+            chemistry=float(0),
+            currentSquad=playerlessSquad,
+            season=currentSeason,
+        )
     if request.method == 'POST':
         form = SquadForm(request.POST)
         if form.is_valid():
@@ -148,6 +160,7 @@ def manageTeam(request, season_id):
                         "chemistryReduction" : chem,
                         "newBudget" : newBudget,
                         "season_id" : season_id,
+                        "all_players" : allPlayers,
                     }
                     )
             else:
@@ -156,10 +169,11 @@ def manageTeam(request, season_id):
     form = SquadForm(instance=fantasy.currentSquad)
     currentCost = fantasy.currentSquad.cost()
     remainingBudget = myModels.BUDGET - currentCost
-    return render(request, "points/manage_squad.html", context={
+    return render(request, "points/fantasise_squad.html", context={
         "form" : form,
         "remainingBudget" : remainingBudget,
-        "messages" : messages.get_messages(request)
+        "messages" : messages.get_messages(request),
+        "all_players" : allPlayers,
         })
 
 
@@ -175,7 +189,7 @@ def confirmTransfers(request, season_id):
     except myModels.Season.DoesNotExist:
         return redirect("/")
     except myModels.Fantasy.DoesNotExist:
-        return redirect("Create Fantasy Team", season_id=season_id)
+        return redirect("Manage Fantasy Team", season_id=season_id)
     if request.method == 'POST':
         form = confirmSquadForm(request.POST)
         if form.is_valid():
@@ -185,12 +199,17 @@ def confirmTransfers(request, season_id):
                 return redirect("Manage Fantasy Team", season_id=season_id)
             else:
                 messages.error(request, "Invalid Squad")
-                return redirect("Create Fantasy Team", season_id=season_id)
+                return redirect("Manage Fantasy Team", season_id=season_id)
     return redirect("Manage Fantasy Team", season_id=season_id)
 
 
 @login_required
 def createTeam(request, season_id):
+    allPlayers = {
+        player.pk : (str(player.cost), str(player.team)) for player in (
+            myModels.Player.objects.all()
+        )
+    }
     currentSeason = None
     try:
         currentSeason = myModels.Season.objects.get(pk=season_id)
@@ -219,7 +238,10 @@ def createTeam(request, season_id):
         return render(
             request,
             "points/fantasise_squad.html",
-            {"form" : form}
+            {
+                "form" : form,
+                "all_players" : allPlayers,
+            }
             )
     return redirect("Manage Fantasy Team", season_id=season_id)
     
