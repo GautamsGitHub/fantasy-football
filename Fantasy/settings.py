@@ -31,7 +31,10 @@ DEBUG = False
 
 ALLOWED_HOSTS = ['icuafc-ff-8428aeb8e9d2.herokuapp.com']
 
-CSRF_TRUSTED_ORIGINS = ['icuafc-ff-8428aeb8e9d2.herokuapp.com']
+CSRF_TRUSTED_ORIGINS = [
+    'http://icuafc-ff-8428aeb8e9d2.herokuapp.com',
+    'https://icuafc-ff-8428aeb8e9d2.herokuapp.com',
+    ]
 
 # Application definition
 
