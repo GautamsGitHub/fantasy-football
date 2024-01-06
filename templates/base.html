@@ -21,6 +21,13 @@
         {% endblock %}
     </head>
     <body>
+        {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
         <nav class="navbar">
             <ul>
                 {% if user.is_authenticated %}

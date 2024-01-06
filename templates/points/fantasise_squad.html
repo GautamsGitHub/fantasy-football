@@ -75,6 +75,12 @@ Create Fantasy Squad
 {% endblock %}
 
 {% block content %}
+
+{% if windowShut %}
+<h3>The Transfer Window is Shut!</h1>
+{% endif %}
+
+
 <h2>Create your fantasy squad</h2>
 <h4>
     Total Cost: <span id="total-cost"></span>

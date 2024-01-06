@@ -4,9 +4,22 @@ from typing import Iterable
 from datetime import date
 from collections import Counter
 
-BUDGET = 500
-SQUAD_SIZE = 11
-SAME_SQUAD_MAX = 4
+
+class TransferWindow(models.Model):
+    shut = models.BooleanField(default=False)
+    budget = models.FloatField(default=1000)
+    squadSize = models.IntegerField(default=11)
+    sameSquadMax = models.IntegerField(default=4)
+    reactivity = models.FloatField(default=1.0)
+
+    def save(self, *args, **kwargs):
+        self.pk = 1
+        super(TransferWindow, self).save(*args, **kwargs)
+
+    @classmethod
+    def getInstance(cls):
+        return cls.objects.get_or_create(pk=1)[0]
+        
 
 class Season(models.Model):
     name = models.CharField(max_length=50)
@@ -147,9 +160,9 @@ class Squad(models.Model):
     def validate(self):
         c = Counter([p.team for p in self.toSet()])
         return (
-            len(self.toSet()) == SQUAD_SIZE
-            and (BUDGET >= self.cost())
-            and (c.most_common(1)[0][1] <= SAME_SQUAD_MAX)
+            len(self.toSet()) == TransferWindow.getInstance().squadSize
+            and (TransferWindow.getInstance().budget >= self.cost())
+            and (c.most_common(1)[0][1] <= TransferWindow.getInstance().sameSquadMax)
         )
 
 class EventType(models.TextChoices):
@@ -263,12 +276,14 @@ class Fantasy(models.Model):
         playersOut = self.currentSquad.toSet() - newSquad.toSet()
         signingCount = len(newSquad.toSet() - self.currentSquad.toSet())
         return (
-            float(signingCount),
+            float(signingCount) * TransferWindow.getInstance().reactivity,
             playersIn,
             playersOut
         )
 
     def makeTransfers(self, newSquad: Squad):
+        if TransferWindow.getInstance().shut:
+            return False
         if (newSquad.validate()):
             self.currentSquad = newSquad
             self.chemistry -= self.chemTransfers(newSquad)[0]
