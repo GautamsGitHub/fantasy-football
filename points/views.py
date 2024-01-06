@@ -117,6 +117,8 @@ def totalRecalc(request):
 
 @login_required
 def manageTeam(request, season_id):
+    theBudget = myModels.TransferWindow.getInstance().budget
+    windowShut = myModels.TransferWindow.getInstance().shut
     allPlayers = {
         player.pk : (str(player.cost), str(player.team)) for player in (
             myModels.Player.objects.all()
@@ -144,9 +146,12 @@ def manageTeam(request, season_id):
         form = SquadForm(request.POST)
         if form.is_valid():
             newSquad: myModels.Squad = form.save()
+            if windowShut:
+                messages.error(request, "Transfer Window Is Shut")
+                return redirect("Manage Fantasy Team", season_id=season_id)
             if newSquad.validate():
                 chem, playersIn, playersOut = fantasy.chemTransfers(newSquad)
-                newBudget = myModels.BUDGET - newSquad.cost()
+                newBudget = theBudget - newSquad.cost()
                 confirmForm = confirmSquadForm(initial={
                     "squad" : newSquad
                 })
@@ -168,10 +173,11 @@ def manageTeam(request, season_id):
                 return redirect("Manage Fantasy Team", season_id=season_id)
     form = SquadForm(instance=fantasy.currentSquad)
     currentCost = fantasy.currentSquad.cost()
-    remainingBudget = myModels.BUDGET - currentCost
+    remainingBudget = theBudget - currentCost
     return render(request, "points/fantasise_squad.html", context={
         "form" : form,
         "remainingBudget" : remainingBudget,
+        "windowShut" : windowShut,
         "messages" : messages.get_messages(request),
         "all_players" : allPlayers,
         })
