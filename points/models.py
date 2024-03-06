@@ -188,7 +188,6 @@ class Game(models.Model):
     def awardPoints(self, weekCount):
         mods = teamModifiers(self)
         currentWeek = WeekPlayerPoints.objects.filter(week=weekCount)
-        currentWeek.update(points=0)
         events = PointScoringEvent.objects.filter(game=self)
         for e in events:
             toChange = currentWeek.get(player=e.player)
