@@ -240,7 +240,7 @@ class WeekPlayerPoints(models.Model):
 
 class Fantasy(models.Model):
     manager = models.ForeignKey(User, on_delete=models.CASCADE)
-    chemistry = models.FloatField()
+    chemistry = models.FloatField(default=float(0))
     currentSquad = models.ForeignKey(Squad, null=True, on_delete=models.SET_NULL)
     season = models.ForeignKey(Season, on_delete=models.CASCADE)
 
