@@ -273,7 +273,7 @@ class Fantasy(models.Model):
     def chemTransfers(self, newSquad: Squad):
         playersIn = newSquad.toSet() - self.currentSquad.toSet()
         playersOut = self.currentSquad.toSet() - newSquad.toSet()
-        signingCount = len(newSquad.toSet() - self.currentSquad.toSet())
+        signingCount = len(playersIn)
         return (
             float(signingCount) * TransferWindow.getInstance().reactivity,
             playersIn,
@@ -284,8 +284,8 @@ class Fantasy(models.Model):
         if TransferWindow.getInstance().shut:
             return False
         if (newSquad.validate()):
-            self.currentSquad = newSquad
             self.chemistry -= self.chemTransfers(newSquad)[0]
+            self.currentSquad = newSquad
             self.save()
             return True
         else:
