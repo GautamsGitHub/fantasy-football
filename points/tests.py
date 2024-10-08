@@ -5,6 +5,9 @@ from .models import Position, EventType
 from .models import Season, Team, Player
 from .models import User, Squad, Fantasy
 from .models import Game, PointScoringEvent
+from .models import WeekPlayerPoints
+from .models import calcNewWeek
+from .models import recalcWPP, totalRecollectFantasyPoints
 
 # Create your tests here.
 
@@ -12,7 +15,7 @@ class FantasyPointsTest(TestCase):
     @classmethod
     def setUpTestData(cls) -> None:
 
-        season = Season.objects.create(name="Test Season", startDate="2024-01-01")
+        cls.season1 = Season.objects.create(name="Test Season", startDate="2024-01-01")
 
         team1 = Team.objects.create(name="Team 1")
         team2 = Team.objects.create(name="Team 2")
@@ -214,7 +217,7 @@ class FantasyPointsTest(TestCase):
             manager=user1,
             chemistry=float(0),
             currentSquad=cls.squad1,
-            season=season
+            season=cls.season1
         )
 
         game1 = Game.objects.create(
@@ -283,7 +286,7 @@ class FantasyPointsTest(TestCase):
         )
 
         game2 = Game.objects.create(
-            ourTeam=team1,
+            ourTeam=team2,
             theirTeam="Test Opponent 2",
             ourScore=0,
             theirScore=2,
@@ -307,13 +310,13 @@ class FantasyPointsTest(TestCase):
         ]:
             PointScoringEvent.objects.create(
                 player=p,
-                game=game1,
+                game=game2,
                 event=EventType.PLAYED
             )
 
         PointScoringEvent.objects.create(
             player=cls.t2_mid1,
-            game=game1,
+            game=game2,
             event=EventType.MOTM
         )
 
@@ -353,5 +356,12 @@ class FantasyPointsTest(TestCase):
             ls=self.t4_fwd1
         )
         self.assertTrue(self.fantasy1.makeTransfers(newSquad))
-        print(self.fantasy1.currentSquad)
         self.assertAlmostEqual(self.fantasy1.chemistry, float(-1))
+
+    def test_calc_new_week(self):
+        calcNewWeek("2024-01-17", self.season1)
+        wpps = WeekPlayerPoints.objects.all()
+        for wpp in wpps:
+            print(wpp.player, wpp.points)
+        
+        

@@ -202,15 +202,15 @@ class Game(models.Model):
                 elif e.player.position == Position.FORWARD:
                     toChange.points += mods["f"]
             elif e.event == EventType.SCORED_GOAL:
-                toChange.points += 5
+                toChange.points += 4
             elif e.event == EventType.ASSISTED_GOAL:
-                toChange.points += 3
+                toChange.points += 2
             elif e.event == EventType.MOTM:
-                toChange.points += 8
+                toChange.points += 6
             elif e.event == EventType.YELLOW_CARD:
-                toChange.points -= 3
+                toChange.points -= 2
             elif e.event == EventType.RED_CARD:
-                toChange.points -= 7
+                toChange.points -= 6
             toChange.save()
         self.week = weekCount
         self.save()
@@ -331,15 +331,15 @@ def normalizeGoals(n):
 
 
 def teamModifiers(game: Game):
-    teamMod = 1
-    if game.home: teamMod = 0
-    if game.ourScore < game.theirScore: teamMod -= 2
-    elif game.ourScore > game.theirScore: teamMod += 2
-    teamMod += normalizeGoals(game.ourScore - game.theirScore)
-    gkMod = 6.5 + teamMod - normalizeGoals(game.theirScore)
-    dMod = 4 + teamMod - 0.8*normalizeGoals(game.theirScore)
-    mMod = teamMod + normalizeGoals(game.ourScore - game.theirScore)*0.75
-    fMod = teamMod + 0.9*normalizeGoals(game.ourScore)
+    teamMod = 5
+    if game.home: teamMod = 4
+    if game.ourScore < game.theirScore: teamMod -= 1
+    elif game.ourScore > game.theirScore: teamMod += 1
+    teamMod += 0.2*normalizeGoals(game.ourScore - game.theirScore)
+    gkMod = teamMod + 2 - 0.8*normalizeGoals(game.theirScore)
+    dMod = teamMod + 1 - 0.4*normalizeGoals(game.theirScore)
+    mMod = teamMod + 1 + 0.4*normalizeGoals(game.ourScore - game.theirScore)
+    fMod = teamMod - 1 + 0.4*normalizeGoals(game.ourScore)
     return {
         "gk": gkMod,
         "d": dMod,
