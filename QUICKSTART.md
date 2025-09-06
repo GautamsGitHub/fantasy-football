@@ -18,14 +18,23 @@ pip install -r requirements.txt
 
 ## 3. Set up your `.env` file in the project root
 
+
 Example:
 ```
 DJANGO_SECRET_KEY=your-django-secret-key
-MEMBER_PASSWORD_CHECK=pbkdf2_sha256$600000$wt5ierc5CehHsJQaEVMyNo$RpZKBUsO62Le6pHKy9owQU3C6fGFoZYjIXRku0K+Dew=
+MEMBER_PASSWORD_CHECK=your-django-password-hash
 DATABASE_URL=notyet
 ```
 
-> The above MEMBER_PASSWORD_CHECK hash is the default for the password: `memberpass`.
+To generate a suitable value for `MEMBER_PASSWORD_CHECK`, run the following in a Django shell:
+
+```
+python manage.py shell
+>>> from django.contrib.auth.hashers import make_password
+>>> print(make_password('your_new_password'))
+```
+
+Copy the output and use it as the value for `MEMBER_PASSWORD_CHECK`.
 
 ## 4. Apply migrations
 ```
