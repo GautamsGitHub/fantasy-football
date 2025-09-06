@@ -1,5 +1,18 @@
 from django.contrib import admin
-from .models import Player, PointScoringEvent, Team, Game, WeekPlayerPoints, Fantasy, Season, TransferWindow
+from .models import Player, PointScoringEvent, Team, Game, WeekPlayerPoints, Fantasy, Season, TransferWindow, Squad, FantasySquadWeek
+def delete_unused_squads(modeladmin, request, queryset):
+	# Only delete squads not referenced by any Fantasy or FantasySquadWeek
+	used_squad_ids = set(Fantasy.objects.exclude(currentSquad=None).values_list('currentSquad', flat=True))
+	used_squad_ids |= set(FantasySquadWeek.objects.values_list('squad', flat=True))
+	unused_squads = Squad.objects.exclude(id__in=used_squad_ids)
+	count = unused_squads.count()
+	unused_squads.delete()
+	modeladmin.message_user(request, f"Deleted {count} unused squads.")
+
+@admin.register(Squad)
+class SquadAdmin(admin.ModelAdmin):
+	actions = [delete_unused_squads]
+
 
 # Register your models here.
 

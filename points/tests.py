@@ -14,6 +14,9 @@ from .models import recalcWPP, totalRecollectFantasyPoints
 class FantasyPointsTest(TestCase):
     pass
 
+# --------------------
+# AI GENERATED TESTS BELOW
+# --------------------
 class SquadManagementTest(TestCase):
     def setUp(self):
         from .models import Season, Team, Player, Position, User, Squad, Fantasy, TransferWindow
@@ -45,10 +48,11 @@ class SquadManagementTest(TestCase):
         self.tw.shut = False
         self.tw.save()
 
+    # AI GENERATED TEST
     def test_valid_squad_creation(self):
         self.assertTrue(self.squad.validate())
 
-
+    # AI GENERATED TEST
     def test_transfer_updates_current_squad(self):
         from .models import Squad
         new_squad = Squad.objects.create(
@@ -435,5 +439,5 @@ class SquadManagementTest(TestCase):
 
         # 5. Yellow card reduces points
         self.assertLess(wpps["Sabiel"], wpps["Zimber"])
-        
-        
+
+
