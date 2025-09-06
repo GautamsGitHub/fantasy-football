@@ -17,12 +17,15 @@ pip install -r requirements.txt
 ```
 
 ## 3. Set up your `.env` file in the project root
+
 Example:
 ```
 DJANGO_SECRET_KEY=your-django-secret-key
-MEMBER_PASSWORD_CHECK=your-member-password-hash
+MEMBER_PASSWORD_CHECK=pbkdf2_sha256$600000$wt5ierc5CehHsJQaEVMyNo$RpZKBUsO62Le6pHKy9owQU3C6fGFoZYjIXRku0K+Dew=
 DATABASE_URL=notyet
 ```
+
+> The above MEMBER_PASSWORD_CHECK hash is the default for the password: `memberpass`.
 
 ## 4. Apply migrations
 ```
