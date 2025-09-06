@@ -57,9 +57,10 @@ class Player(models.Model):
     team = models.ForeignKey(Team, on_delete=models.CASCADE)
     position = models.CharField(choices=Position.choices, max_length=50)
     cost = models.FloatField()
+    is_active = models.BooleanField(default=True, help_text="Is this player currently active and selectable?")
 
     def __str__(self) -> str:
-        return self.name
+        return f"{self.name} ({self.team.name})"
     
     def getVitalStats(self):
         playerEvents = PointScoringEvent.objects.filter(

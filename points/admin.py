@@ -15,8 +15,13 @@ class SquadAdmin(admin.ModelAdmin):
 
 
 # Register your models here.
+@admin.register(Player)
+class PlayerAdmin(admin.ModelAdmin):
+	list_display = ("name", "team", "position", "cost", "is_active")
+	list_editable = ("is_active",)
+	list_filter = ("is_active", "team", "position")
+	search_fields = ("name",)
 
-admin.site.register(Player)
 admin.site.register(Team)
 admin.site.register(Game)
 admin.site.register(PointScoringEvent)

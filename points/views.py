@@ -29,7 +29,7 @@ class FixtureForm(forms.ModelForm):
 
 class PlayerContributionForm(forms.Form):
     player = forms.ModelChoiceField(
-        queryset=myModels.Player.objects.all(),
+        queryset=myModels.Player.objects.filter(is_active=True),
         required=False
         )
     goals = forms.IntegerField(required=False)
@@ -326,7 +326,8 @@ def updateGame(request, game_id):
 
 def playerList(request):
     lastThreeWeeks = myModels.WeekCount.objects.order_by("-date")[:3]
-    players = myModels.Player.objects.all()
+    show_inactive = request.GET.get('show_inactive', '0') == '1'
+    players = myModels.Player.objects.all() if show_inactive else myModels.Player.objects.filter(is_active=True)
     for player in players:
         player.vital_stats = player.getVitalStats()
         player.points_in_last_three_weeks = [
