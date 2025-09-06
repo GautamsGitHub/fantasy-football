@@ -147,6 +147,7 @@ def manageTeam(request, season_id):
         if form.is_valid():
             newSquad: myModels.Squad = form.save()
             if windowShut:
+                newSquad.delete()
                 messages.error(request, "Transfer Window Is Shut")
                 return redirect("Manage Fantasy Team", season_id=season_id)
             if newSquad.validate():
@@ -167,8 +168,9 @@ def manageTeam(request, season_id):
                         "season_id" : season_id,
                         "all_players" : allPlayers,
                     }
-                    )
+                )
             else:
+                newSquad.delete()
                 messages.error(request, "Invalid Squad")
                 return redirect("Manage Fantasy Team", season_id=season_id)
     form = SquadForm(instance=fantasy.currentSquad)
@@ -204,9 +206,11 @@ def confirmTransfers(request, season_id):
                 messages.success(request, "Made Transfers")
                 return redirect("Manage Fantasy Team", season_id=season_id)
             else:
+                # If transfer is not confirmed, delete the unused squad
+                newSquad.delete()
                 messages.error(request, "Invalid Squad")
                 return redirect("Manage Fantasy Team", season_id=season_id)
-    return redirect("Manage Fantasy Team", season_id=season_id)
+        return redirect("Manage Fantasy Team", season_id=season_id)
 
 
 def fantasyLeague(request, season_id):
